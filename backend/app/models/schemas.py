@@ -1,73 +1,142 @@
 from __future__ import annotations
-import datetime as dt
-from typing import Literal, Optional
+
+from typing import Literal, Optional, List, Dict
+
 from pydantic import BaseModel, Field
 
-Topic = Literal['world','pakistan','politics','business','markets','technology','ai','science','space','health','sport','cricket','football','culture','film_music','education','climate','startups','opinion']
-Slot = Literal['lead','secondary','feature','standard','brief']
-EventType = Literal['impression','click','skip','dwell','thumb_up','thumb_down','save','pdf_open']
+Topic = Literal[
+    "world", "pakistan", "politics", "business", "markets", "technology",
+    "ai", "science", "space", "health", "sport", "cricket", "football",
+    "culture", "film_music", "education", "climate", "startups", "opinion",
+]
 
-class ArticleRecord(BaseModel):
-    id: str; url: str; title: str; body: str = ''; source: str
-    topic: Topic = 'world'; image_url: Optional[str] = None
-    published_at: Optional[dt.datetime] = None; importance: float = 0.5
-    cluster_id: Optional[str] = None; brief: str = ''
+Slot = Literal["lead", "secondary", "feature", "standard", "brief"]
 
-class Body(BaseModel):
-    short: str; medium: str; long: str
+EventType = Literal[
+    "impression", "click", "skip", "dwell", "thumb_up",
+    "thumb_down", "save", "pdf_open",
+]
+
 
 class Art(BaseModel):
-    id: str; headline: str; deck: str = ''; body: Body
-    source: str; url: str; tracked_url: str = ''
-    image: Optional[str] = None; topic: Topic; slot: Slot
-    why: str = ''; outside_bubble: bool = False
-    importance: float = 0.5; cluster_id: Optional[str] = None
-    published_at: Optional[dt.datetime] = None; qr_svg: Optional[str] = None
+    kind: Literal["image", "svg", "none"] = "none"
+    url: Optional[str] = None
+    caption: Optional[str] = None
+    alt: Optional[str] = None
+
+
+class Body(BaseModel):
+    short: str = ""
+    medium: str = ""
+    long: str = ""
+
+
+class ArticleRecord(BaseModel):
+    id: str
+    title: str
+    url: str = ""
+    source: str = ""
+    source_id: str = ""
+    topics: List[Topic] = Field(default_factory=list)
+    published_at: Optional[str] = None
+    body: Body = Field(default_factory=Body)
+    art: Art = Field(default_factory=Art)
+    importance: float = 0.5
+
 
 class Weather(BaseModel):
-    city: str; hi: int; lo: int; sky: str
+    city: str = ""
+    temp_c: Optional[float] = None
+    condition: str = ""
+    high_c: Optional[float] = None
+    low_c: Optional[float] = None
+
+
 class Section(BaseModel):
-    name: str; items: list[Art] = Field(default_factory=list)
-class Front(BaseModel):
-    lead: Art; secondary: list[Art] = Field(default_factory=list); briefs: list[Art] = Field(default_factory=list)
+    name: str
+    slug: str
+    articles: List[ArticleRecord] = Field(default_factory=list)
+
+
 class QuizQ(BaseModel):
-    q: str; options: list[str]; answer_index: int; explain: str = ''
+    question: str
+    options: List[str]
+    answer: int = 0
+
+
 class WordSearch(BaseModel):
-    size: int; grid: list[str]; words: list[str]
+    grid: List[str] = Field(default_factory=list)
+    words: List[str] = Field(default_factory=list)
+
+
 class MarketRow(BaseModel):
-    label: str; value: str; change_pct: Optional[float] = None
+    symbol: str
+    price: Optional[float] = None
+    change_pct: Optional[float] = None
+
+
 class OnThisDay(BaseModel):
-    year: int; text: str
+    year: Optional[int] = None
+    text: str = ""
+
+
 class BackPage(BaseModel):
-    quiz: list[QuizQ] = Field(default_factory=list); word_search: Optional[WordSearch] = None
-    markets: list[MarketRow] = Field(default_factory=list); on_this_day: list[OnThisDay] = Field(default_factory=list)
+    quiz: List[QuizQ] = Field(default_factory=list)
+    word_search: Optional[WordSearch] = None
+    on_this_day: List[OnThisDay] = Field(default_factory=list)
+
+
 class GalleryRow(BaseModel):
-    source: str; url: str; headline: str; emphasis: str = ''
+    title: str
+    url: str = ""
+    caption: str = ""
+
+
 class PressGallery(BaseModel):
-    topic_label: str; agreed_facts: list[str] = Field(default_factory=list)
-    rows: list[GalleryRow] = Field(default_factory=list)
-    only_in_one: list[dict] = Field(default_factory=list); open_question: str = ''
+    rows: List[GalleryRow] = Field(default_factory=list)
+
+
+class Front(BaseModel):
+    lead: Optional[ArticleRecord] = None
+    secondary: List[ArticleRecord] = Field(default_factory=list)
+    briefs: List[ArticleRecord] = Field(default_factory=list)
+    weather: Optional[Weather] = None
+    quote: str = ""
+
+
 class Chapter(BaseModel):
-    story_id: str; title: str; start_sec: float
+    title: str
+    articles: List[ArticleRecord] = Field(default_factory=list)
+    slot: Slot = "standard"
+
 
 class Edition(BaseModel):
-    date: dt.date; issue_no: int; reader_id: str; reader_name: str; tagline: str = ''
-    weather: Optional[Weather] = None; editors_note: str = ''
-    front: Front; sections: list[Section] = Field(default_factory=list)
+    id: str
+    reader_id: str
+    date: str
+    nameplate: str = "Edition of One"
+    dateline: str = ""
+    front: Front = Field(default_factory=Front)
+    sections: List[Section] = Field(default_factory=list)
     back_page: BackPage = Field(default_factory=BackPage)
     press_gallery: Optional[PressGallery] = None
-    audio_url: Optional[str] = None; audio_script: str = ''; chapters: list[Chapter] = Field(default_factory=list)
-    pdf_url: Optional[str] = None; meta: dict = Field(default_factory=dict)
+    chapters: List[Chapter] = Field(default_factory=list)
+    outside_bubble: List[ArticleRecord] = Field(default_factory=list)
+
 
 class Profile(BaseModel):
-    reader_id: str; display_name: str = ''; interests_text: str = ''
-    topic_weights: dict[str, float] = Field(default_factory=dict)
-    topic_stats: dict[str, dict[str, float]] = Field(default_factory=dict)
-    reading_minutes: int = 15; region_bias: float = 0.5
-    tone: Literal['brief','deep'] = 'brief'; watch_entities: list[str] = Field(default_factory=list)
-    centroid: list[float] = Field(default_factory=list)
+    reader_id: str
+    name: str = ""
+    topics: List[Topic] = Field(default_factory=list)
+    weights: Dict[str, float] = Field(default_factory=dict)
+    location: str = ""
+    tone: str = "neutral"
+    outside_bubble_ratio: float = 0.15
+
 
 class Event(BaseModel):
-    reader_id: str; type: EventType; article_id: Optional[str] = None
-    edition_date: Optional[dt.date] = None; value: float = 0.0; slot: str = ''
-    ts: Optional[dt.datetime] = None
+    reader_id: str
+    article_id: Optional[str] = None
+    event_type: EventType
+    value: float = 1.0
+    ts: Optional[str] = None

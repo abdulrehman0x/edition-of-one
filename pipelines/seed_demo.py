@@ -1,98 +1,87 @@
 from __future__ import annotations
 
-import datetime as dt
 import json
 import random
+import sys
+from datetime import date, timedelta
 from pathlib import Path
 
-from app.core.store import get_store
-from app.models.schemas import ArticleRecord, Profile
-from app.services.fallback_editor import build_edition
+HERE = Path(__file__).resolve().parent
+ROOT = HERE.parent
+sys.path.insert(0, str(ROOT / "backend"))
 
-DEMO_READERS = [
+from app.core.store import get_store  # noqa: E402
+from app.models.schemas import ArticleRecord, Profile, Weather  # noqa: E402
+from app.services.fallback_editor import build_edition  # noqa: E402
+from app.services.widgets import weather_for  # noqa: E402
+
+PROFILE_SPECS = [
     {
         "reader_id": "demo-ayesha",
-        "display_name": "Ayesha",
-        "topic_weights": {"ai": 0.9, "technology": 0.8, "startups": 0.6, "science": 0.4, "pakistan": 0.5},
-        "reading_minutes": 15,
-        "region_bias": 0.5,
+        "name": "Ayesha",
+        "topics": ["pakistan", "politics", "education", "world"],
+        "weights": {"pakistan": 1.0, "politics": 0.9, "education": 0.8, "world": 0.6},
+        "location": "Islamabad",
     },
     {
         "reader_id": "demo-bilal",
-        "display_name": "Bilal",
-        "topic_weights": {"cricket": 0.9, "sport": 0.7, "pakistan": 0.9, "politics": 0.6, "business": 0.4},
-        "reading_minutes": 15,
-        "region_bias": 0.8,
+        "name": "Bilal",
+        "topics": ["business", "markets", "technology", "startups", "ai"],
+        "weights": {"business": 1.0, "markets": 0.9, "technology": 0.8,
+                     "startups": 0.7, "ai": 0.7},
+        "location": "Karachi",
     },
     {
         "reader_id": "demo-sara",
-        "display_name": "Sara",
-        "topic_weights": {"climate": 0.9, "science": 0.8, "health": 0.6, "world": 0.6, "culture": 0.5},
-        "reading_minutes": 30,
-        "region_bias": 0.5,
+        "name": "Sara",
+        "topics": ["cricket", "sport", "culture", "film_music", "science", "space"],
+        "weights": {"cricket": 1.0, "sport": 0.8, "culture": 0.7,
+                     "film_music": 0.7, "science": 0.6, "space": 0.6},
+        "location": "Lahore",
     },
 ]
 
-
-def _load_articles() -> list[ArticleRecord]:
-    cache_path = Path("data/cache/articles.json")
-    fallback_path = Path("data/fallback_articles.json")
-    paths = [cache_path, fallback_path]
-    for path in paths:
-        if not path.exists():
-            continue
-        try:
-            data = json.loads(path.read_text(encoding="utf-8"))
-            articles = [ArticleRecord.model_validate(row) for row in data]
-            if articles:
-                return articles
-        except Exception:
-            continue
-    raise RuntimeError("no articles available in cache or fallback")
+SAMPLE_SIZE = 20
 
 
-def _write_json(path: Path, payload) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+def _finish(edition, profile, weather: dict, date_str: str) -> None:
+    edition.front.weather = Weather(**weather)
+    edition.dateline = f"{profile.location} \u2014 {date_str}"
 
 
 def main() -> None:
-    articles = _load_articles()
     store = get_store()
-    today = dt.date.today()
-    start = today - dt.timedelta(days=13)
-    latest_ayesha = None
+    fb_path = ROOT / "data/fallback_articles.json"
+    raw = json.loads(fb_path.read_text(encoding="utf-8"))
+    articles = [ArticleRecord(**a) for a in raw]
 
-    for config in DEMO_READERS:
-        profile = Profile(
-            reader_id=config["reader_id"],
-            display_name=config["display_name"],
-            topic_weights=config["topic_weights"],
-            reading_minutes=config["reading_minutes"],
-            region_bias=config["region_bias"],
-        )
-        store.save_profile(profile)
+    random.seed(42)
 
-        for offset in range(14):
-            edition_date = start + dt.timedelta(days=offset)
-            issue_no = offset + 1
-            rng = random.Random(edition_date.toordinal())
-            sample_size = max(1, int(round(len(articles) * 0.7)))
-            sample_size = min(sample_size, len(articles))
-            sample = rng.sample(articles, sample_size)
-            edition = build_edition(profile, sample, edition_date, issue_no)
-            edition.meta = {"fallback": True, "demo_seed": True}
-            store.save_edition(edition)
-            if profile.reader_id == "demo-ayesha" and edition_date == today:
-                latest_ayesha = edition
+    for spec in PROFILE_SPECS:
+        profile = Profile(tone="neutral", outside_bubble_ratio=0.15, **spec)
+        store.put(f"profiles/{profile.reader_id}", profile.model_dump())
+        weather = weather_for(profile.location)  # one lookup per reader (cached)
+        for i in range(14):
+            d = (date.today() - timedelta(days=i)).isoformat()
+            sample = random.sample(articles, k=min(len(articles), SAMPLE_SIZE))
+            edition = build_edition(profile.reader_id, d, sample, profile)
+            _finish(edition, profile, weather, d)
+            store.put(f"editions/{profile.reader_id}/{d}", edition.model_dump())
+        print(f"  seeded {profile.reader_id}: 14 editions")
 
-    if latest_ayesha is None:
-        raise RuntimeError("latest demo-ayesha edition was not built")
+    sample_profile = Profile(tone="neutral", outside_bubble_ratio=0.15, **PROFILE_SPECS[0])
+    sample_date = date.today().isoformat()
+    sample = random.sample(articles, k=min(len(articles), SAMPLE_SIZE))
+    sample_ed = build_edition(sample_profile.reader_id, sample_date, sample, sample_profile)
+    _finish(sample_ed, sample_profile, weather_for(sample_profile.location), sample_date)
 
-    payload = latest_ayesha.model_dump(mode="json")
-    _write_json(Path("frontend/public/sample-edition.json"), payload)
-    _write_json(Path("docs/samples/sample-edition.json"), payload)
-    print("Seeded 3 readers x 14 editions")
+    out_dir = ROOT / "frontend/public"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    (out_dir / "sample-edition.json").write_text(
+        json.dumps(sample_ed.model_dump(), indent=2, default=str),
+        encoding="utf-8",
+    )
+    print("  wrote frontend/public/sample-edition.json")
 
 
 if __name__ == "__main__":

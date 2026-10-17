@@ -1,51 +1,35 @@
 from __future__ import annotations
 
 import sys
+from datetime import date, timedelta
+from pathlib import Path
 
-from app.core.store import get_store
-from app.models.schemas import Edition
+HERE = Path(__file__).resolve().parent
+ROOT = HERE.parent
+sys.path.insert(0, str(ROOT / "backend"))
 
-READER_IDS = ["demo-ayesha", "demo-bilal", "demo-sara"]
+from app.core.store import get_store  # noqa: E402
+from app.models.schemas import Edition  # noqa: E402
+
+READERS = ["demo-ayesha", "demo-bilal", "demo-sara"]
 
 
 def main() -> None:
     store = get_store()
-    failures: list[str] = []
-    rows: list[tuple[str, int, str, int]] = []
-
-    for reader_id in READER_IDS:
-        editions = store.list_editions(reader_id)
-        try:
-            validated = [Edition.model_validate(edition.model_dump()) for edition in editions]
-        except Exception as exc:
-            failures.append(f"{reader_id}: validation failed: {exc}")
-            continue
-        if len(validated) != 14:
-            failures.append(f"{reader_id}: expected 14 editions, found {len(validated)}")
-        if not validated:
-            failures.append(f"{reader_id}: no editions")
-            continue
-        lead = validated[0].front.lead
-        if not lead.id or not lead.headline:
-            failures.append(f"{reader_id}: empty lead")
-        if not any(section.items for section in validated[0].sections):
-            failures.append(f"{reader_id}: no non-empty sections")
-        dates = [edition.date for edition in validated]
-        if len(set(dates)) != len(dates):
-            failures.append(f"{reader_id}: duplicate edition dates")
-        rows.append((reader_id, len(validated), validated[0].date.isoformat(), len(validated[0].sections)))
-
-    print(f"{'reader':12} {'editions':>8} {'latest':>12} {'sections':>8}")
-    print("-" * 44)
-    for reader_id, count, latest, sections in rows:
-        print(f"{reader_id:12} {count:8d} {latest:>12} {sections:8d}")
-
-    if failures:
-        for failure in failures:
-            print(f"FAIL: {failure}")
-        sys.exit(1)
-
-    print("OK: 3 readers x 14 editions valid")
+    ok = 0
+    for reader in READERS:
+        for i in range(14):
+            d = (date.today() - timedelta(days=i)).isoformat()
+            data = store.get(f"editions/{reader}/{d}")
+            assert data is not None, f"missing edition for {reader} on {d}"
+            ed = Edition(**data)
+            assert ed.reader_id == reader, f"reader mismatch in {reader} {d}"
+            assert ed.date == d, f"date mismatch in {reader} {d}"
+            assert ed.front is not None, f"no front for {reader} {d}"
+            assert ed.nameplate, f"missing nameplate in {reader} {d}"
+            ok += 1
+        print(f"  {reader}: 14 editions verified")
+    print(f"Verified {ok} editions total.")
 
 
 if __name__ == "__main__":

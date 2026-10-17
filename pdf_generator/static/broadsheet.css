@@ -1,0 +1,160 @@
+@page {
+  size: A3;
+  margin: 18mm 16mm 18mm 16mm;
+  @bottom-center {
+    content: counter(page) " / " counter(pages);
+    font-family: "DejaVu Serif", serif;
+    font-size: 8pt;
+  }
+}
+
+html, body {
+  background: #f5efe0;
+  color: #1a1a1a;
+  font-family: "DejaVu Serif", Georgia, serif;
+  font-size: 9.5pt;
+  line-height: 1.42;
+  text-align: justify;
+  hyphens: auto;
+}
+
+.masthead {
+  border-bottom: 3px double #1a1a1a;
+  margin-bottom: 6mm;
+  padding-bottom: 2mm;
+  text-align: center;
+}
+
+.nameplate {
+  font-family: "DejaVu Serif", serif;
+  font-weight: 900;
+  font-size: 42pt;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.dateline {
+  font-size: 8pt;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #444;
+  margin-top: 1mm;
+}
+
+.front {
+  display: flex;
+  gap: 8mm;
+  border-bottom: 1px solid #1a1a1a;
+  padding-bottom: 4mm;
+  margin-bottom: 4mm;
+}
+
+.col-main { flex: 3; }
+.col-side  { flex: 1; border-left: 1px solid #1a1a1a; padding-left: 6mm; }
+
+.lead-headline {
+  font-family: "DejaVu Serif", serif;
+  font-size: 26pt;
+  line-height: 1.06;
+  margin: 0 0 3mm 0;
+  text-align: left;
+}
+
+.lead-body { column-count: 3; column-gap: 6mm; column-rule: 1px solid #b9a98a; }
+
+.dropcap {
+  float: left;
+  font-size: 52pt;
+  line-height: 0.86;
+  padding-right: 2mm;
+  font-weight: 700;
+  color: #6b1d1d;
+}
+
+.byline {
+  font-size: 7.5pt;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #555;
+  margin-top: 2mm;
+}
+
+.secondary {
+  column-count: 4;
+  column-gap: 6mm;
+  column-rule: 1px solid #b9a98a;
+  margin-bottom: 4mm;
+}
+
+.briefs {
+  column-count: 5;
+  column-gap: 4mm;
+  border-top: 1px solid #1a1a1a;
+  padding-top: 3mm;
+  margin-bottom: 6mm;
+}
+
+.brief h3 { font-size: 10pt; margin: 0 0 1mm 0; }
+
+.standard h2 { font-size: 13pt; line-height: 1.15; margin: 0 0 2mm 0; }
+
+.weather {
+  border: 1px solid #1a1a1a;
+  padding: 3mm;
+  text-align: center;
+  margin-bottom: 4mm;
+}
+.weather-city { font-size: 9pt; letter-spacing: 0.2em; text-transform: uppercase; }
+.weather-temp { font-size: 22pt; font-weight: 700; }
+.weather-range { font-size: 8pt; }
+
+.pullquote {
+  font-style: italic;
+  font-size: 11pt;
+  border-top: 1px solid #1a1a1a;
+  border-bottom: 1px solid #1a1a1a;
+  padding: 3mm 0;
+  margin: 4mm 0;
+  text-align: left;
+}
+
+.qr svg { width: 32mm; height: 32mm; }
+
+.section-page {
+  border-top: 2px solid #1a1a1a;
+  padding-top: 4mm;
+  margin-top: 6mm;
+  page-break-before: always;
+}
+
+.section-title {
+  font-size: 18pt;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin: 0 0 3mm 0;
+}
+
+.section-grid {
+  column-count: 4;
+  column-gap: 6mm;
+  column-rule: 1px solid #b9a98a;
+}
+
+.outside-bubble {
+  border-top: 1px solid #1a1a1a;
+  padding-top: 4mm;
+  margin-top: 6mm;
+}
+
+.outside { font-style: italic; }
+
+.colophon {
+  margin-top: 8mm;
+  border-top: 1px solid #1a1a1a;
+  padding-top: 2mm;
+  font-size: 7.5pt;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #555;
+  text-align: center;
+}

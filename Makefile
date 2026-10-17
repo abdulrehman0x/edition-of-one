@@ -1,23 +1,31 @@
+PYTHON ?= python
 export PYTHONPATH=backend:.
 
-.PHONY: setup snapshot seed verify api test demo
+.PHONY: setup snapshot seed verify api test demo pdf pdfcheck
 
 setup:
-	pip install -r backend/requirements.txt
+	$(PYTHON) -m pip install -r backend/requirements.txt
 
 snapshot:
-	python -m pipelines.snapshot_feeds
+	$(PYTHON) pipelines/snapshot_feeds.py
 
 seed:
-	python -m pipelines.seed_demo
+	$(PYTHON) pipelines/seed_demo.py
 
 verify:
-	python -m pipelines.verify_cache
+	$(PYTHON) pipelines/verify_cache.py
 
 api:
-	uvicorn app.main:app --app-dir backend --reload --port 8000
+	uvicorn app.main:app --reload --host 0.0.0.0 --port 8000 --app-dir backend
 
 test:
-	pytest backend/tests -q
+	pytest backend/tests
 
-demo: seed verify api
+demo:
+	$(PYTHON) pipelines/seed_demo.py && $(PYTHON) pipelines/verify_cache.py
+
+pdf:
+	$(PYTHON) pdf_generator/render.py --all-demo
+
+pdfcheck:
+	$(PYTHON) pdf_generator/render.py --all-demo --check

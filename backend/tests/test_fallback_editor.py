@@ -1,101 +1,76 @@
-from __future__ import annotations
+from app.models.schemas import ArticleRecord, Body, Profile
+from app.services.fallback_editor import (
+    build_edition,
+    dedupe,
+    extract_summary,
+    jaccard,
+    _tokens,
+)
 
-import datetime as dt
 
-import pytest
-
-from app.models.schemas import ArticleRecord, Edition, Profile
-from app.services.fallback_editor import build_edition
-
-
-def _article(
-    article_id: str,
-    title: str,
-    topic: str = "world",
-    body: str = "One sentence here. Another sentence follows. A third sentence closes the note.",
-    importance: float = 0.5,
-) -> ArticleRecord:
+def _art(i, title, topics, text="", imp=0.6):
     return ArticleRecord(
-        id=article_id,
-        url=f"https://example.org/{article_id}",
+        id=f"a{i}",
         title=title,
-        body=body,
-        source="Test Wire",
-        topic=topic,
-        importance=importance,
+        topics=topics,
+        body=Body(short=text, medium=text, long=text),
+        importance=imp,
     )
 
 
-def _profile(**kwargs) -> Profile:
-    data = {"reader_id": "reader-test", "display_name": "Tester", "topic_weights": {"world": 0.5}}
-    data.update(kwargs)
-    return Profile(**data)
+def test_jaccard_identical():
+    assert jaccard(_tokens("hello world"), _tokens("hello world")) == 1.0
 
 
-def _all_ids(edition: Edition) -> list[str]:
-    ids = [edition.front.lead.id]
-    ids.extend(article.id for article in edition.front.secondary)
-    ids.extend(article.id for article in edition.front.briefs)
-    for section in edition.sections:
-        ids.extend(article.id for article in section.items)
-    return ids
-
-
-def test_zero_weights() -> None:
-    profile = _profile(topic_weights={})
-    articles = [_article(f"a{i}", f"Story number {i}") for i in range(10)]
-    edition = build_edition(profile, articles, dt.date(2024, 1, 1), 1)
-    assert edition.front.lead.id
-
-
-def test_three_articles() -> None:
-    profile = _profile()
-    articles = [_article(f"a{i}", f"Three story {i}") for i in range(3)]
-    edition = build_edition(profile, articles, dt.date(2024, 1, 1), 1)
-    assert edition.front.lead.id
-    assert len(_all_ids(edition)) >= 3
-
-
-def test_empty_bodies() -> None:
-    profile = _profile()
-    articles = [
-        ArticleRecord(
-            id=f"empty{i}",
-            url=f"https://example.org/empty{i}",
-            title=f"Empty body story {i}",
-            body="",
-            brief="",
-            source="Test Wire",
-            topic="world",
-        )
-        for i in range(6)
+def test_dedupe_removes_near_duplicates():
+    arts = [
+        _art(1, "Breaking news about the economy today"),
+        _art(2, "Breaking news about the economy today"),
+        _art(3, "A totally different headline on sport"),
     ]
-    edition = build_edition(profile, articles, dt.date(2024, 1, 1), 1)
-    assert edition.front.lead.id
+    out = dedupe(arts)
+    assert len(out) == 2
 
 
-def test_no_articles_raises() -> None:
-    profile = _profile()
-    with pytest.raises(ValueError, match="no articles"):
-        build_edition(profile, [], dt.date(2024, 1, 1), 1)
+def test_extract_summary_respects_word_limit():
+    text = "First sentence here. Second sentence follows. Third sentence is here too."
+    s = extract_summary(text, 5)
+    assert len(s.split()) <= 5
 
 
-def test_near_duplicates_removed() -> None:
-    profile = _profile()
-    articles = [
-        _article("a1", "This is a very similar title about the same topic"),
-        _article("a2", "This is a very similar title about the same topic"),
-        _article("a3", "Completely different story about something else entirely"),
-        _article("a4", "Another story about cats and their daily habits"),
-    ]
-    edition = build_edition(profile, articles, dt.date(2024, 1, 1), 1)
-    ids = _all_ids(edition)
-    assert "a1" in ids
-    assert "a2" not in ids
+WORLD_TITLES = [
+    "Floods displace thousands along river basin",
+    "Summit negotiators narrow gap on shipping rules",
+    "Central bank holds rates amid cooling prices",
+    "Volcano alert raised near island resorts",
+    "Opposition leaders demand fresh ballot count",
+    "Aid convoy reaches besieged northern town",
+    "Telescope captures distant galaxy cluster",
+    "Rail strike enters second week",
+]
 
 
-def test_output_validates_against_edition() -> None:
-    profile = _profile()
-    articles = [_article(f"v{i}", f"Validation story {i}") for i in range(6)]
-    edition = build_edition(profile, articles, dt.date(2024, 1, 1), 1)
-    Edition.model_validate(edition.model_dump())
+def test_build_edition_slots_each_story_once():
+    profile = Profile(
+        reader_id="r1",
+        topics=["world", "pakistan"],
+        weights={"world": 1.0, "pakistan": 1.0},
+        location="Islamabad",
+        outside_bubble_ratio=0.2,
+    )
+    arts = [_art(i, t, ["world"]) for i, t in enumerate(WORLD_TITLES)]
+    arts.append(_art(99, "Outside topic technology story", ["technology"]))
+    ed = build_edition("r1", "2025-01-01", arts, profile)
+
+    assert ed.front.lead is not None
+    assert ed.front.secondary
+    assert ed.outside_bubble and ed.outside_bubble[0].id == "a99"
+    assert ed.reader_id == "r1"
+    assert ed.date == "2025-01-01"
+
+    ids = [ed.front.lead.id]
+    ids += [a.id for a in ed.front.secondary]
+    ids += [a.id for a in ed.front.briefs]
+    for sec in ed.sections:
+        ids += [a.id for a in sec.articles]
+    assert len(ids) == len(set(ids)), "a story was placed in two slots"

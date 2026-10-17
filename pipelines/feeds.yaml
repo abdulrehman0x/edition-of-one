@@ -1,52 +1,18 @@
 feeds:
-  - name: BBC World
-    url: https://feeds.bbci.co.uk/news/world/rss.xml
-    topic: world
-  - name: BBC Technology
-    url: https://feeds.bbci.co.uk/news/technology/rss.xml
-    topic: technology
-  - name: BBC Science
-    url: https://feeds.bbci.co.uk/news/science_and_environment/rss.xml
-    topic: science
-  - name: BBC Business
-    url: https://feeds.bbci.co.uk/news/business/rss.xml
-    topic: business
-  - name: BBC Health
-    url: https://feeds.bbci.co.uk/news/health/rss.xml
-    topic: health
-  - name: BBC Sport
-    url: https://feeds.bbci.co.uk/sport/rss.xml
-    topic: sport
-  - name: Al Jazeera
-    url: https://www.aljazeera.com/xml/rss/all.xml
-    topic: world
-  - name: Dawn
-    url: https://www.dawn.com/feeds/home
-    topic: pakistan
-  - name: Express Tribune
-    url: https://tribune.com.pk/feed/home
-    topic: pakistan
-  - name: Ars Technica
-    url: https://feeds.arstechnica.com/arstechnica/index
-    topic: technology
-  - name: Hacker News
-    url: https://hnrss.org/frontpage
-    topic: technology
-  - name: TechCrunch
-    url: https://techcrunch.com/feed/
-    topic: startups
-  - name: MIT Technology Review
-    url: https://www.technologyreview.com/feed/
-    topic: ai
-  - name: NASA
-    url: https://www.nasa.gov/rss/dyn/breaking_news.rss
-    topic: space
-  - name: ESPNcricinfo
-    url: https://www.espncricinfo.com/rss/content/story/feeds/0.xml
-    topic: cricket
-  - name: Guardian Culture
-    url: https://www.theguardian.com/culture/rss
-    topic: culture
-  - name: Guardian Climate
-    url: https://www.theguardian.com/environment/climate-crisis/rss
-    topic: climate
+  - {name: "BBC World", url: "https://feeds.bbci.co.uk/news/world/rss.xml", topics: [world]}
+  - {name: "BBC Business", url: "https://feeds.bbci.co.uk/news/business/rss.xml", topics: [business, markets]}
+  - {name: "BBC Technology", url: "https://feeds.bbci.co.uk/news/technology/rss.xml", topics: [technology, ai]}
+  - {name: "BBC Science", url: "https://feeds.bbci.co.uk/news/science_and_environment/rss.xml", topics: [science, climate]}
+  - {name: "BBC Health", url: "https://feeds.bbci.co.uk/news/health/rss.xml", topics: [health]}
+  - {name: "BBC Sport", url: "https://feeds.bbci.co.uk/sport/rss.xml", topics: [sport]}
+  - {name: "Reuters World", url: "https://www.reutersagency.com/feed/?best-topics=world", topics: [world, politics]}
+  - {name: "Al Jazeera", url: "https://www.aljazeera.com/xml/rss/all.xml", topics: [world, politics]}
+  - {name: "Dawn Pakistan", url: "https://www.dawn.com/feeds/home", topics: [pakistan, politics]}
+  - {name: "The News Pakistan", url: "https://www.thenews.com.pk/rss/1/1", topics: [pakistan]}
+  - {name: "ESPN Cricinfo", url: "https://www.espncricinfo.com/rss/content/story/feeds/0.xml", topics: [cricket, sport]}
+  - {name: "Guardian World", url: "https://www.theguardian.com/world/rss", topics: [world, politics]}
+  - {name: "Guardian Culture", url: "https://www.theguardian.com/culture/rss", topics: [culture, film_music]}
+  - {name: "Ars Technica", url: "https://feeds.arstechnica.com/arstechnica/index", topics: [technology, ai]}
+  - {name: "NASA", url: "https://www.nasa.gov/rss/dyn/breaking_news.rss", topics: [space, science]}
+  - {name: "Nature", url: "https://www.nature.com/nature.rss", topics: [science, health]}
+  - {name: "TechCrunch", url: "https://techcrunch.com/feed/", topics: [startups, technology]}

@@ -1,66 +1,55 @@
 create extension if not exists vector;
 
+-- Generic key/value table used by SupabaseStore.
+create table if not exists kv (
+  key text primary key,
+  value jsonb not null,
+  updated_at timestamptz default now()
+);
+
 create table if not exists readers (
-    id uuid primary key default gen_random_uuid(),
-    display_name text not null default '',
-    interests_text text not null default '',
-    topic_weights jsonb not null default '{}'::jsonb,
-    topic_stats jsonb not null default '{}'::jsonb,
-    reading_minutes int not null default 15,
-    region_bias real not null default 0.5,
-    tone text not null default 'brief',
-    watch_entities jsonb not null default '[]'::jsonb,
-    centroid vector(384),
-    created_at timestamptz not null default now()
+  id text primary key,
+  name text not null,
+  profile jsonb not null default '{}'::jsonb,
+  created_at timestamptz default now()
 );
 
 create table if not exists sources (
-    id serial primary key,
-    name text not null,
-    feed_url text not null unique,
-    topic text not null default 'world',
-    enabled boolean not null default true
+  id text primary key,
+  name text not null,
+  url text not null,
+  topics text[] default '{}',
+  created_at timestamptz default now()
 );
 
 create table if not exists articles (
-    id text primary key,
-    source_id integer references sources(id),
-    url text not null unique,
-    title text not null default '',
-    body text not null default '',
-    image_url text,
-    published_at timestamptz,
-    topic text not null default 'world',
-    importance real not null default 0.5,
-    brief text not null default '',
-    cluster_id text,
-    embedding vector(384),
-    fetched_at timestamptz not null default now()
+  id text primary key,
+  source_id text references sources(id) on delete set null,
+  title text not null,
+  url text,
+  body text,
+  topics text[] default '{}',
+  published_at timestamptz,
+  embedding vector(384),
+  created_at timestamptz default now()
 );
 
 create table if not exists editions (
-    id uuid primary key default gen_random_uuid(),
-    reader_id uuid not null references readers(id) on delete cascade,
-    edition_date date not null,
-    doc jsonb not null,
-    pdf_url text,
-    audio_url text,
-    unique (reader_id, edition_date)
+  id text primary key,
+  reader_id text references readers(id) on delete cascade,
+  date date not null,
+  payload jsonb not null,
+  created_at timestamptz default now()
 );
 
 create table if not exists events (
-    id bigserial primary key,
-    reader_id uuid not null references readers(id) on delete cascade,
-    article_id text,
-    edition_date date,
-    type text not null check (type in ('impression','click','skip','dwell','thumb_up','thumb_down','save','pdf_open')),
-    value real not null default 0.0,
-    slot text not null default '',
-    created_at timestamptz not null default now()
+  id bigserial primary key,
+  reader_id text references readers(id) on delete cascade,
+  article_id text,
+  event_type text not null,
+  value double precision default 1.0,
+  created_at timestamptz default now()
 );
 
-create index if not exists articles_embedding_ivfflat_idx
-    on articles using ivfflat (embedding vector_cosine_ops) with (lists = 100);
-
-create index if not exists events_reader_created_idx
-    on events (reader_id, created_at);
+create index if not exists articles_embedding_idx
+  on articles using ivfflat (embedding vector_cosine_ops) with (lists = 100);

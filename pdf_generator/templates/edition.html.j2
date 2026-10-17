@@ -1,0 +1,75 @@
+{% import "_macros.html.j2" as m %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{{ edition.nameplate }} — {{ edition.date }}</title>
+  <link rel="stylesheet" href="static/broadsheet.css">
+</head>
+<body>
+
+<header class="masthead">
+  {{ m.nameplate(edition.nameplate or "Edition of One") }}
+  {{ m.dateline(edition.dateline or edition.date) }}
+</header>
+
+<section class="front">
+  <div class="col col-main">
+    {{ m.article_lead(edition.front.lead) }}
+  </div>
+  <aside class="col col-side">
+    {% if edition.front.weather and edition.front.weather.temp_c is not none %}
+      <div class="weather">
+        <div class="weather-city">{{ edition.front.weather.city }}</div>
+        <div class="weather-temp">{{ edition.front.weather.temp_c }}°</div>
+        <div class="weather-range">H {{ edition.front.weather.high_c }}° / L {{ edition.front.weather.low_c }}°</div>
+        {% if edition.front.weather.condition %}<div class="weather-range">{{ edition.front.weather.condition }}</div>{% endif %}
+      </div>
+    {% endif %}
+    {% if edition.front.quote %}
+      <blockquote class="pullquote">{{ edition.front.quote }}</blockquote>
+    {% endif %}
+    {{ m.qr_block(edition.qr_svg) }}
+  </aside>
+</section>
+
+<section class="secondary">
+  {% for a in edition.front.secondary %}
+    {{ m.article_standard(a) }}
+  {% endfor %}
+</section>
+
+<section class="briefs">
+  {% for a in edition.front.briefs %}
+    {{ m.article_brief(a) }}
+  {% endfor %}
+</section>
+
+{% for section in edition.sections %}
+<section class="section-page">
+  <h2 class="section-title">{{ section.name }}</h2>
+  <div class="section-grid">
+    {% for a in section.articles %}
+      {{ m.article_standard(a) }}
+    {% endfor %}
+  </div>
+</section>
+{% endfor %}
+
+{% if edition.outside_bubble %}
+<section class="outside-bubble">
+  <h2 class="section-title">Outside Your Bubble</h2>
+  <div class="section-grid">
+    {% for a in edition.outside_bubble %}
+      {{ m.article_brief(a, klass='outside') }}
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<footer class="colophon">
+  <span>Edition of One · {{ edition.reader_id }} · {{ edition.date }}</span>
+</footer>
+
+</body>
+</html>

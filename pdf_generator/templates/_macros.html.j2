@@ -1,0 +1,46 @@
+{% macro nameplate(text) -%}
+  <div class="nameplate">{{ text }}</div>
+{%- endmacro %}
+
+{% macro dateline(text) -%}
+  <div class="dateline">{{ text }}</div>
+{%- endmacro %}
+
+{% macro article_lead(a) -%}
+  {% if a %}
+    <article class="lead-story">
+      <h1 class="lead-headline">{{ a.title }}</h1>
+      {% if a.body and a.body.long %}
+        <p class="lead-body"><span class="dropcap">{{ a.body.long[0] }}</span>{{ a.body.long[1:] }}</p>
+      {% elif a.body and a.body.medium %}
+        <p class="lead-body">{{ a.body.medium }}</p>
+      {% endif %}
+      <div class="byline">{{ a.source }}</div>
+    </article>
+  {% endif %}
+{%- endmacro %}
+
+{% macro article_brief(a, klass='') -%}
+  {% if a %}
+    <article class="brief {{ klass }}">
+      <h3>{{ a.title }}</h3>
+      {% if a.body and a.body.short %}<p>{{ a.body.short }}</p>{% endif %}
+    </article>
+  {% endif %}
+{%- endmacro %}
+
+{% macro article_standard(a) -%}
+  {% if a %}
+    <article class="standard">
+      <h2>{{ a.title }}</h2>
+      {% if a.body and a.body.medium %}<p>{{ a.body.medium }}</p>{% endif %}
+      <div class="byline">{{ a.source }}</div>
+    </article>
+  {% endif %}
+{%- endmacro %}
+
+{% macro qr_block(svg) -%}
+  {% if svg %}
+    <div class="qr">{{ svg|safe }}</div>
+  {% endif %}
+{%- endmacro %}

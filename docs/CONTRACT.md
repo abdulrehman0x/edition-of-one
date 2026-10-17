@@ -1,93 +1,55 @@
-# schemas.py
-```python
-from __future__ import annotations
-import datetime as dt
-from typing import Literal, Optional
-from pydantic import BaseModel, Field
+# Edition of One — Data Contract (Phase 1)
 
-Topic = Literal['world','pakistan','politics','business','markets','technology','ai','science','space','health','sport','cricket','football','culture','film_music','education','climate','startups','opinion']
-Slot = Literal['lead','secondary','feature','standard','brief']
-EventType = Literal['impression','click','skip','dwell','thumb_up','thumb_down','save','pdf_open']
+All wire formats are Pydantic v2 models defined in
+`backend/app/models/schemas.py`.
 
-class ArticleRecord(BaseModel):
-    id: str; url: str; title: str; body: str = ''; source: str
-    topic: Topic = 'world'; image_url: Optional[str] = None
-    published_at: Optional[dt.datetime] = None; importance: float = 0.5
-    cluster_id: Optional[str] = None; brief: str = ''
+## Enums
 
-class Body(BaseModel):
-    short: str; medium: str; long: str
+- `Topic` — one of: world, pakistan, politics, business, markets, technology, ai,
+  science, space, health, sport, cricket, football, culture, film_music,
+  education, climate, startups, opinion.
+- `Slot` — lead | secondary | feature | standard | brief.
+- `EventType` — impression | click | skip | dwell | thumb_up | thumb_down |
+  save | pdf_open.
 
-class Art(BaseModel):
-    id: str; headline: str; deck: str = ''; body: Body
-    source: str; url: str; tracked_url: str = ''
-    image: Optional[str] = None; topic: Topic; slot: Slot
-    why: str = ''; outside_bubble: bool = False
-    importance: float = 0.5; cluster_id: Optional[str] = None
-    published_at: Optional[dt.datetime] = None; qr_svg: Optional[str] = None
+## Models
 
-class Weather(BaseModel):
-    city: str; hi: int; lo: int; sky: str
-class Section(BaseModel):
-    name: str; items: list[Art] = Field(default_factory=list)
-class Front(BaseModel):
-    lead: Art; secondary: list[Art] = Field(default_factory=list); briefs: list[Art] = Field(default_factory=list)
-class QuizQ(BaseModel):
-    q: str; options: list[str]; answer_index: int; explain: str = ''
-class WordSearch(BaseModel):
-    size: int; grid: list[str]; words: list[str]
-class MarketRow(BaseModel):
-    label: str; value: str; change_pct: Optional[float] = None
-class OnThisDay(BaseModel):
-    year: int; text: str
-class BackPage(BaseModel):
-    quiz: list[QuizQ] = Field(default_factory=list); word_search: Optional[WordSearch] = None
-    markets: list[MarketRow] = Field(default_factory=list); on_this_day: list[OnThisDay] = Field(default_factory=list)
-class GalleryRow(BaseModel):
-    source: str; url: str; headline: str; emphasis: str = ''
-class PressGallery(BaseModel):
-    topic_label: str; agreed_facts: list[str] = Field(default_factory=list)
-    rows: list[GalleryRow] = Field(default_factory=list)
-    only_in_one: list[dict] = Field(default_factory=list); open_question: str = ''
-class Chapter(BaseModel):
-    story_id: str; title: str; start_sec: float
+- `ArticleRecord` {id, title, url, source, source_id, topics, published_at,
+  body: Body, art: Art, importance}
+- `Body` {short, medium, long}
+- `Art` {kind, url, caption, alt}
+- `Weather` {city, temp_c, condition, high_c, low_c}
+- `Section` {name, slug, articles}
+- `Front` {lead, secondary, briefs, weather, quote}
+- `QuizQ` {question, options, answer}
+- `WordSearch` {grid, words}
+- `MarketRow` {symbol, price, change_pct}
+- `OnThisDay` {year, text}
+- `BackPage` {quiz, word_search, on_this_day}
+- `GalleryRow` {title, url, caption}
+- `PressGallery` {rows}
+- `Chapter` {title, articles, slot}
+- `Edition` {id, reader_id, date, nameplate, dateline, front, sections,
+  back_page, press_gallery, chapters, outside_bubble}
+- `Profile` {reader_id, name, topics, weights, location, tone,
+  outside_bubble_ratio}
+- `Event` {reader_id, article_id, event_type, value, ts}
 
-class Edition(BaseModel):
-    date: dt.date; issue_no: int; reader_id: str; reader_name: str; tagline: str = ''
-    weather: Optional[Weather] = None; editors_note: str = ''
-    front: Front; sections: list[Section] = Field(default_factory=list)
-    back_page: BackPage = Field(default_factory=BackPage)
-    press_gallery: Optional[PressGallery] = None
-    audio_url: Optional[str] = None; audio_script: str = ''; chapters: list[Chapter] = Field(default_factory=list)
-    pdf_url: Optional[str] = None; meta: dict = Field(default_factory=dict)
+## Storage
 
-class Profile(BaseModel):
-    reader_id: str; display_name: str = ''; interests_text: str = ''
-    topic_weights: dict[str, float] = Field(default_factory=dict)
-    topic_stats: dict[str, dict[str, float]] = Field(default_factory=dict)
-    reading_minutes: int = 15; region_bias: float = 0.5
-    tone: Literal['brief','deep'] = 'brief'; watch_entities: list[str] = Field(default_factory=list)
-    centroid: list[float] = Field(default_factory=list)
+- `FileStore` keeps JSON at `data/cache/<key>.json` (keys are sanitised).
+- `SupabaseStore` uses the `kv` table in `supabase/migrations/001_init.sql`;
+  silently degrades to `FileStore` on connection error.
 
-class Event(BaseModel):
-    reader_id: str; type: EventType; article_id: Optional[str] = None
-    edition_date: Optional[dt.date] = None; value: float = 0.0; slot: str = ''
-    ts: Optional[dt.datetime] = None
-```
+## Endpoints
 
-# REST contract
+App entry point: `app.main:app` (re-exports `app.api.main:app`).
 
-| Method | Path | Body / Query | Returns |
-|---|---|---|---|
-| POST | `/onboarding` | `{display_name, interests_text, tiles:list[str], reading_minutes, tone, region_bias}` | `{reader_id, profile}` |
-| GET | `/edition/today?reader_id=` | query `reader_id` | `Edition` (build if missing; never fail: fall back to newest cached edition) |
-| GET | `/edition/{date}?reader_id=` | query `reader_id` | `Edition` |
-| GET | `/archive?reader_id=&q=` | query `reader_id`, `q` | `[{date, issue_no, lead_headline}]` newest first, `q` filters headlines |
-| GET | `/edition/{date}/pdf?reader_id=` | query `reader_id` | `application/pdf` |
-| GET | `/edition/{date}/audio?reader_id=` | query `reader_id` | `audio/mpeg` |
-| POST | `/events` | `{events:list[Event]}` | `{accepted:int}` |
-| GET | `/profile?reader_id=` | query `reader_id` | `{profile, deltas:{topic:float}}` |
-| PATCH | `/profile` | `{reader_id, forget_topics:list[str]}` | `profile` |
-| GET | `/r/{article_id}?reader_id=&to=` | query `reader_id`, `to` | `302` to `to`, logs a click |
-| POST | `/dev/advance-day?reader_id=` | query `reader_id` | `{new_edition_date}` |
-| GET | `/health` | none | `{status:'ok', offline:bool}` |
+- `GET  /health`
+- `POST /onboarding`
+- `GET  /edition/{reader_id}?date=YYYY-MM-DD|today`
+- `GET  /archive/{reader_id}`
+- `POST /events`
+- `GET  /profile/{reader_id}`
+- `GET  /dev/readers`          (only when ENABLE_DEV=1)
+- `DELETE /dev/reset`          (only when ENABLE_DEV=1)

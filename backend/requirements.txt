@@ -17,3 +17,5 @@ supabase
 python-dotenv
 pytest
 pyyaml
+# optional, only used when LLM_OFFLINE=0 (falls back to hashing embeddings):
+# sentence-transformers
