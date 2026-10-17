@@ -10,3 +10,10 @@ data/cache/weather_*.json
 frontend/node_modules/
 data/cache/audio/
 frontend/.next/
+
+# Temporary setup scripts
+*.py
+
+# Data and event cache
+data/cache/
+
