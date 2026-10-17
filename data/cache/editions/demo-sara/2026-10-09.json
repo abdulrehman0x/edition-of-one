@@ -1,0 +1,387 @@
+{
+  "date": "2026-10-09",
+  "issue_no": 6,
+  "reader_id": "demo-sara",
+  "reader_name": "Sara",
+  "tagline": "Printed for Sara",
+  "weather": null,
+  "editors_note": "Today's edition leads with climate and science, chosen from your reading signals.",
+  "front": {
+    "lead": {
+      "id": "demo-0013",
+      "headline": "[Demo] Climate guide describes everyday adaptation",
+      "deck": "A synthetic climate guide about small adaptation steps.",
+      "body": {
+        "short": "A climate guide described everyday adaptation in general terms. It covered planning for changing routines, reducing waste, and checking local resources. No real policy or event was named.",
+        "medium": "A climate guide described everyday adaptation in general terms. It covered planning for changing routines, reducing waste, and checking local resources. No real policy or event was named. The guide encouraged readers to start with small steps and review what works. It also noted that clear communication helps groups respond to uncertainty together.",
+        "long": "A climate guide described everyday adaptation in general terms. It covered planning for changing routines, reducing waste, and checking local resources. No real policy or event was named. The guide encouraged readers to start with small steps and review what works. It also noted that clear communication helps groups respond to uncertainty together."
+      },
+      "source": "Demo Wire",
+      "url": "https://example.org/demo/13",
+      "tracked_url": "http://localhost:8000/r/demo-0013?reader_id=demo-sara&to=https%3A//example.org/demo/13",
+      "image": null,
+      "topic": "climate",
+      "slot": "lead",
+      "why": "Top story of the day",
+      "outside_bubble": false,
+      "importance": 0.6,
+      "cluster_id": null,
+      "published_at": "2024-01-13T00:00:00Z",
+      "qr_svg": null
+    },
+    "secondary": [
+      {
+        "id": "demo-0018",
+        "headline": "[Demo] Wellness desk shares a general routine note",
+        "deck": "A synthetic wellness note about pacing and balance.",
+        "body": {
+          "short": "A wellness desk shared a general routine note about pacing and balance. It mentioned breaks, movement, and clear daily priorities. It did not give medical advice or describe a real condition.",
+          "medium": "A wellness desk shared a general routine note about pacing and balance. It mentioned breaks, movement, and clear daily priorities. It did not give medical advice or describe a real condition. The note encouraged readers to notice small changes and seek qualified guidance when needed. It used plain language and avoided promises.",
+          "long": "A wellness desk shared a general routine note about pacing and balance. It mentioned breaks, movement, and clear daily priorities. It did not give medical advice or describe a real condition. The note encouraged readers to notice small changes and seek qualified guidance when needed. It used plain language and avoided promises."
+        },
+        "source": "Demo Wire",
+        "url": "https://example.org/demo/18",
+        "tracked_url": "http://localhost:8000/r/demo-0018?reader_id=demo-sara&to=https%3A//example.org/demo/18",
+        "image": null,
+        "topic": "health",
+        "slot": "secondary",
+        "why": "Because you follow health",
+        "outside_bubble": false,
+        "importance": 0.5,
+        "cluster_id": null,
+        "published_at": "2024-01-18T00:00:00Z",
+        "qr_svg": null
+      },
+      {
+        "id": "demo-0015",
+        "headline": "[Demo] World desk shares a general context note",
+        "deck": "A synthetic world note about context and cooperation.",
+        "body": {
+          "short": "A world desk shared a general context note about everyday cooperation. The text described clear communication, shared schedules, and respect for different viewpoints. It did not report a real event or location.",
+          "medium": "A world desk shared a general context note about everyday cooperation. The text described clear communication, shared schedules, and respect for different viewpoints. It did not report a real event or location. The note encouraged readers to separate observation from assumption. It closed with a reminder that context can change how people understand the same situation.",
+          "long": "A world desk shared a general context note about everyday cooperation. The text described clear communication, shared schedules, and respect for different viewpoints. It did not report a real event or location. The note encouraged readers to separate observation from assumption. It closed with a reminder that context can change how people understand the same situation."
+        },
+        "source": "Demo Wire",
+        "url": "https://example.org/demo/15",
+        "tracked_url": "http://localhost:8000/r/demo-0015?reader_id=demo-sara&to=https%3A//example.org/demo/15",
+        "image": null,
+        "topic": "world",
+        "slot": "secondary",
+        "why": "Because you follow world",
+        "outside_bubble": false,
+        "importance": 0.5,
+        "cluster_id": null,
+        "published_at": "2024-01-15T00:00:00Z",
+        "qr_svg": null
+      },
+      {
+        "id": "demo-0001",
+        "headline": "[Demo] A community group shares a general update",
+        "deck": "A generic synthetic update about routines, cooperation, and planning.",
+        "body": {
+          "short": "A community group shared a general update about everyday routines and local cooperation. The note described small changes in schedules, shared resources, and the value of clear communication.",
+          "medium": "A community group shared a general update about everyday routines and local cooperation. The note described small changes in schedules, shared resources, and the value of clear communication. It did not report a specific event or name any person. Readers were invited to consider how ordinary systems support daily life and how careful planning can help people adapt.",
+          "long": "A community group shared a general update about everyday routines and local cooperation. The note described small changes in schedules, shared resources, and the value of clear communication. It did not report a specific event or name any person. Readers were invited to consider how ordinary systems support daily life and how careful planning can help people adapt."
+        },
+        "source": "Demo Wire",
+        "url": "https://example.org/demo/1",
+        "tracked_url": "http://localhost:8000/r/demo-0001?reader_id=demo-sara&to=https%3A//example.org/demo/1",
+        "image": null,
+        "topic": "world",
+        "slot": "secondary",
+        "why": "Because you follow world",
+        "outside_bubble": false,
+        "importance": 0.5,
+        "cluster_id": null,
+        "published_at": "2024-01-01T00:00:00Z",
+        "qr_svg": null
+      },
+      {
+        "id": "demo-0020",
+        "headline": "[Demo] Arts desk describes a simple workshop plan",
+        "deck": "A synthetic arts note about a small workshop plan.",
+        "body": {
+          "short": "An arts desk described a simple workshop plan for small groups. The note mentioned warmup exercises, shared materials, and short reflection breaks. It did not review a real artist or performance.",
+          "medium": "An arts desk described a simple workshop plan for small groups. The note mentioned warmup exercises, shared materials, and short reflection breaks. It did not review a real artist or performance. The plan emphasized participation and clear instructions. It ended with a suggestion to keep the first session small and adjust based on feedback.",
+          "long": "An arts desk described a simple workshop plan for small groups. The note mentioned warmup exercises, shared materials, and short reflection breaks. It did not review a real artist or performance. The plan emphasized participation and clear instructions. It ended with a suggestion to keep the first session small and adjust based on feedback."
+        },
+        "source": "Demo Wire",
+        "url": "https://example.org/demo/20",
+        "tracked_url": "http://localhost:8000/r/demo-0020?reader_id=demo-sara&to=https%3A//example.org/demo/20",
+        "image": "https://example.org/demo/image/20.jpg",
+        "topic": "culture",
+        "slot": "secondary",
+        "why": "Because you follow culture",
+        "outside_bubble": false,
+        "importance": 0.5,
+        "cluster_id": null,
+        "published_at": "2024-01-20T00:00:00Z",
+        "qr_svg": null
+      }
+    ],
+    "briefs": [
+      {
+        "id": "demo-0012",
+        "headline": "[Demo] Culture notebook describes shared reading",
+        "deck": "A synthetic culture note about shared reading and discussion.",
+        "body": {
+          "short": "A culture notebook described shared reading and small discussion groups. The note mentioned choosing a theme, keeping sessions short, and inviting different interpretations. It did not review a real book or exhibition.",
+          "medium": "A culture notebook described shared reading and small discussion groups. The note mentioned choosing a theme, keeping sessions short, and inviting different interpretations. It did not review a real book or exhibition. The aim was to show how culture can support conversation and careful listening. It ended with a simple prompt for future gatherings.",
+          "long": "A culture notebook described shared reading and small discussion groups. The note mentioned choosing a theme, keeping sessions short, and inviting different interpretations. It did not review a real book or exhibition. The aim was to show how culture can support conversation and careful listening. It ended with a simple prompt for future gatherings."
+        },
+        "source": "Demo Wire",
+        "url": "https://example.org/demo/12",
+        "tracked_url": "http://localhost:8000/r/demo-0012?reader_id=demo-sara&to=https%3A//example.org/demo/12",
+        "image": "https://example.org/demo/image/12.jpg",
+        "topic": "culture",
+        "slot": "brief",
+        "why": "Because you follow culture",
+        "outside_bubble": false,
+        "importance": 0.5,
+        "cluster_id": null,
+        "published_at": "2024-01-12T00:00:00Z",
+        "qr_svg": null
+      },
+      {
+        "id": "demo-0006",
+        "headline": "[Demo] AI primer explains checking outputs",
+        "deck": "A synthetic AI primer about outputs, assumptions, and review.",
+        "body": {
+          "short": "An AI primer explained the importance of checking outputs and asking clear questions. The text described general patterns in automated tools without naming a real system.",
+          "medium": "An AI primer explained the importance of checking outputs and asking clear questions. The text described general patterns in automated tools without naming a real system. It recommended comparing results, reviewing assumptions, and keeping human judgment in the loop. The primer also noted that simple explanations can help teams discuss tradeoffs before adopting new workflows.",
+          "long": "An AI primer explained the importance of checking outputs and asking clear questions. The text described general patterns in automated tools without naming a real system. It recommended comparing results, reviewing assumptions, and keeping human judgment in the loop. The primer also noted that simple explanations can help teams discuss tradeoffs before adopting new workflows."
+        },
+        "source": "Demo Wire",
+        "url": "https://example.org/demo/6",
+        "tracked_url": "http://localhost:8000/r/demo-0006?reader_id=demo-sara&to=https%3A//example.org/demo/6",
+        "image": null,
+        "topic": "ai",
+        "slot": "brief",
+        "why": "Outside your usual reading",
+        "outside_bubble": true,
+        "importance": 0.7,
+        "cluster_id": null,
+        "published_at": "2024-01-06T00:00:00Z",
+        "qr_svg": null
+      },
+      {
+        "id": "demo-0021",
+        "headline": "[Demo] AI notebook describes prompt review habits",
+        "deck": "A synthetic AI note about prompt review and uncertainty.",
+        "body": {
+          "short": "An AI notebook described prompt review habits and clear expectations. It mentioned checking instructions, comparing outputs, and noting uncertainty. No real model or service was named.",
+          "medium": "An AI notebook described prompt review habits and clear expectations. It mentioned checking instructions, comparing outputs, and noting uncertainty. No real model or service was named. The note encouraged users to keep examples simple and to review results before sharing them. It also suggested documenting what worked and what needed correction.",
+          "long": "An AI notebook described prompt review habits and clear expectations. It mentioned checking instructions, comparing outputs, and noting uncertainty. No real model or service was named. The note encouraged users to keep examples simple and to review results before sharing them. It also suggested documenting what worked and what needed correction."
+        },
+        "source": "Demo Wire",
+        "url": "https://example.org/demo/21",
+        "tracked_url": "http://localhost:8000/r/demo-0021?reader_id=demo-sara&to=https%3A//example.org/demo/21",
+        "image": null,
+        "topic": "ai",
+        "slot": "brief",
+        "why": "Because you follow ai",
+        "outside_bubble": false,
+        "importance": 0.6,
+        "cluster_id": null,
+        "published_at": "2024-01-21T00:00:00Z",
+        "qr_svg": null
+      }
+    ]
+  },
+  "sections": [
+    {
+      "name": "Business",
+      "items": [
+        {
+          "id": "demo-0019",
+          "headline": "[Demo] Market notebook describes careful comparison",
+          "deck": "A synthetic market note about comparison and record keeping.",
+          "body": {
+            "short": "A market notebook described careful comparison and basic record keeping. It mentioned reviewing categories, checking dates, and writing down assumptions. No real price or company was named.",
+            "medium": "A market notebook described careful comparison and basic record keeping. It mentioned reviewing categories, checking dates, and writing down assumptions. No real price or company was named. The note focused on habits that support clear thinking. It also suggested that readers ask what a number measures before drawing conclusions.",
+            "long": "A market notebook described careful comparison and basic record keeping. It mentioned reviewing categories, checking dates, and writing down assumptions. No real price or company was named. The note focused on habits that support clear thinking. It also suggested that readers ask what a number measures before drawing conclusions."
+          },
+          "source": "Demo Wire",
+          "url": "https://example.org/demo/19",
+          "tracked_url": "http://localhost:8000/r/demo-0019?reader_id=demo-sara&to=https%3A//example.org/demo/19",
+          "image": null,
+          "topic": "business",
+          "slot": "feature",
+          "why": "Because you follow business",
+          "outside_bubble": false,
+          "importance": 0.5,
+          "cluster_id": null,
+          "published_at": "2024-01-19T00:00:00Z",
+          "qr_svg": null
+        },
+        {
+          "id": "demo-0004",
+          "headline": "[Demo] Small business note emphasizes clear records",
+          "deck": "A synthetic business note about records and routines.",
+          "body": {
+            "short": "A small business note emphasized clear records and steady routines. It described generic practices such as reviewing schedules, tracking simple costs, and keeping communication direct. No real company or market result was mentioned.",
+            "medium": "A small business note emphasized clear records and steady routines. It described generic practices such as reviewing schedules, tracking simple costs, and keeping communication direct. No real company or market result was mentioned. The note suggested that reliable habits can reduce confusion during busy periods. It closed with a reminder to review assumptions before making changes.",
+            "long": "A small business note emphasized clear records and steady routines. It described generic practices such as reviewing schedules, tracking simple costs, and keeping communication direct. No real company or market result was mentioned. The note suggested that reliable habits can reduce confusion during busy periods. It closed with a reminder to review assumptions before making changes."
+          },
+          "source": "Demo Wire",
+          "url": "https://example.org/demo/4",
+          "tracked_url": "http://localhost:8000/r/demo-0004?reader_id=demo-sara&to=https%3A//example.org/demo/4",
+          "image": null,
+          "topic": "business",
+          "slot": "standard",
+          "why": "Because you follow business",
+          "outside_bubble": false,
+          "importance": 0.5,
+          "cluster_id": null,
+          "published_at": "2024-01-04T00:00:00Z",
+          "qr_svg": null
+        }
+      ]
+    },
+    {
+      "name": "Cricket",
+      "items": [
+        {
+          "id": "demo-0011",
+          "headline": "[Demo] Cricket practice note focuses on basics",
+          "deck": "A synthetic cricket note about drills, communication, and rest.",
+          "body": {
+            "short": "A cricket practice note focused on basics and steady improvement. It described warmups, repeated drills, and clear communication between players. No real player or result was mentioned.",
+            "medium": "A cricket practice note focused on basics and steady improvement. It described warmups, repeated drills, and clear communication between players. No real player or result was mentioned. The note suggested that simple routines help groups stay organized. It also reminded readers to balance effort with rest and to keep sessions inclusive.",
+            "long": "A cricket practice note focused on basics and steady improvement. It described warmups, repeated drills, and clear communication between players. No real player or result was mentioned. The note suggested that simple routines help groups stay organized. It also reminded readers to balance effort with rest and to keep sessions inclusive."
+          },
+          "source": "Demo Wire",
+          "url": "https://example.org/demo/11",
+          "tracked_url": "http://localhost:8000/r/demo-0011?reader_id=demo-sara&to=https%3A//example.org/demo/11",
+          "image": null,
+          "topic": "cricket",
+          "slot": "feature",
+          "why": "Because you follow cricket",
+          "outside_bubble": false,
+          "importance": 0.5,
+          "cluster_id": null,
+          "published_at": "2024-01-11T00:00:00Z",
+          "qr_svg": null
+        }
+      ]
+    },
+    {
+      "name": "Pakistan",
+      "items": [
+        {
+          "id": "demo-0023",
+          "headline": "[Demo] City desk shares a general coordination note",
+          "deck": "A synthetic city note about coordination and clarity.",
+          "body": {
+            "short": "A city desk shared a general coordination note about everyday services and communication. It described clear schedules, shared information, and simple feedback. It did not report a real municipal event.",
+            "medium": "A city desk shared a general coordination note about everyday services and communication. It described clear schedules, shared information, and simple feedback. It did not report a real municipal event. The note encouraged readers to consider how small process changes affect daily life. It closed with a prompt about improving clarity without adding complexity.",
+            "long": "A city desk shared a general coordination note about everyday services and communication. It described clear schedules, shared information, and simple feedback. It did not report a real municipal event. The note encouraged readers to consider how small process changes affect daily life. It closed with a prompt about improving clarity without adding complexity."
+          },
+          "source": "Demo Wire",
+          "url": "https://example.org/demo/23",
+          "tracked_url": "http://localhost:8000/r/demo-0023?reader_id=demo-sara&to=https%3A//example.org/demo/23",
+          "image": null,
+          "topic": "pakistan",
+          "slot": "feature",
+          "why": "Because you follow pakistan",
+          "outside_bubble": false,
+          "importance": 0.5,
+          "cluster_id": null,
+          "published_at": "2024-01-23T00:00:00Z",
+          "qr_svg": null
+        },
+        {
+          "id": "demo-0002",
+          "headline": "[Demo] Local planning note describes shared resources",
+          "deck": "A synthetic planning note about coordination and shared resources.",
+          "body": {
+            "short": "A local planning note described shared resources and simple coordination. The text focused on routine choices, clear schedules, and practical communication. It avoided specific claims and did not identify any organization.",
+            "medium": "A local planning note described shared resources and simple coordination. The text focused on routine choices, clear schedules, and practical communication. It avoided specific claims and did not identify any organization. The note suggested that small improvements can make daily systems easier to understand. It also encouraged readers to think about how ordinary decisions affect groups over time.",
+            "long": "A local planning note described shared resources and simple coordination. The text focused on routine choices, clear schedules, and practical communication. It avoided specific claims and did not identify any organization. The note suggested that small improvements can make daily systems easier to understand. It also encouraged readers to think about how ordinary decisions affect groups over time."
+          },
+          "source": "Demo Wire",
+          "url": "https://example.org/demo/2",
+          "tracked_url": "http://localhost:8000/r/demo-0002?reader_id=demo-sara&to=https%3A//example.org/demo/2",
+          "image": null,
+          "topic": "pakistan",
+          "slot": "standard",
+          "why": "Because you follow pakistan",
+          "outside_bubble": false,
+          "importance": 0.5,
+          "cluster_id": null,
+          "published_at": "2024-01-02T00:00:00Z",
+          "qr_svg": null
+        }
+      ]
+    },
+    {
+      "name": "Space",
+      "items": [
+        {
+          "id": "demo-0024",
+          "headline": "[Demo] Sky watchers share a simple observation log",
+          "deck": "A synthetic sky-watching note about logs and patience.",
+          "body": {
+            "short": "Sky watchers shared a simple observation log and general viewing checklist. The note mentioned timing, weather, and comfortable equipment. It did not name a real mission or object. The group emphasized patience and shared learning.",
+            "medium": "Sky watchers shared a simple observation log and general viewing checklist. The note mentioned timing, weather, and comfortable equipment. It did not name a real mission or object. The group emphasized patience and shared learning. It also suggested keeping expectations modest and recording what was actually seen rather than what was expected.",
+            "long": "Sky watchers shared a simple observation log and general viewing checklist. The note mentioned timing, weather, and comfortable equipment. It did not name a real mission or object. The group emphasized patience and shared learning. It also suggested keeping expectations modest and recording what was actually seen rather than what was expected."
+          },
+          "source": "Demo Wire",
+          "url": "https://example.org/demo/24",
+          "tracked_url": "http://localhost:8000/r/demo-0024?reader_id=demo-sara&to=https%3A//example.org/demo/24",
+          "image": null,
+          "topic": "space",
+          "slot": "feature",
+          "why": "Because you follow space",
+          "outside_bubble": false,
+          "importance": 0.5,
+          "cluster_id": null,
+          "published_at": "2024-01-24T00:00:00Z",
+          "qr_svg": null
+        }
+      ]
+    },
+    {
+      "name": "Sport",
+      "items": [
+        {
+          "id": "demo-0010",
+          "headline": "[Demo] Sports club outlines practice planning",
+          "deck": "A synthetic sports note about practice planning and safety.",
+          "body": {
+            "short": "A sports club outlined practice planning in general terms. The note described warmups, clear goals, and balanced schedules. It did not report a match or name a team.",
+            "medium": "A sports club outlined practice planning in general terms. The note described warmups, clear goals, and balanced schedules. It did not report a match or name a team. Coaches were encouraged to keep instructions short and to review progress over time. The club also emphasized safety, rest, and inclusive participation for different experience levels.",
+            "long": "A sports club outlined practice planning in general terms. The note described warmups, clear goals, and balanced schedules. It did not report a match or name a team. Coaches were encouraged to keep instructions short and to review progress over time. The club also emphasized safety, rest, and inclusive participation for different experience levels."
+          },
+          "source": "Demo Wire",
+          "url": "https://example.org/demo/10",
+          "tracked_url": "http://localhost:8000/r/demo-0010?reader_id=demo-sara&to=https%3A//example.org/demo/10",
+          "image": "https://example.org/demo/image/10.jpg",
+          "topic": "sport",
+          "slot": "feature",
+          "why": "Because you follow sport",
+          "outside_bubble": false,
+          "importance": 0.5,
+          "cluster_id": null,
+          "published_at": "2024-01-10T00:00:00Z",
+          "qr_svg": null
+        }
+      ]
+    }
+  ],
+  "back_page": {
+    "quiz": [],
+    "word_search": null,
+    "markets": [],
+    "on_this_day": []
+  },
+  "press_gallery": null,
+  "audio_url": null,
+  "audio_script": "",
+  "chapters": [],
+  "pdf_url": null,
+  "meta": {
+    "fallback": true,
+    "demo_seed": true
+  }
+}

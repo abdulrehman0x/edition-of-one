@@ -1,0 +1,20 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    ports:
+      - "8000:8000"
+    env_file: .env
+    volumes:
+      - ./data:/app/data
+      - ./pdf_generator:/app/pdf_generator
+
+  # web:
+  #   image: node:20
+  #   working_dir: /app/frontend
+  #   command: npm run dev
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - api

@@ -1,0 +1,18 @@
+{
+  "reader_id": "demo-sara",
+  "display_name": "Sara",
+  "interests_text": "",
+  "topic_weights": {
+    "climate": 0.9,
+    "science": 0.8,
+    "health": 0.6,
+    "world": 0.6,
+    "culture": 0.5
+  },
+  "topic_stats": {},
+  "reading_minutes": 30,
+  "region_bias": 0.5,
+  "tone": "brief",
+  "watch_entities": [],
+  "centroid": []
+}
