@@ -1,46 +1,64 @@
-{% macro nameplate(text) -%}
-  <div class="nameplate">{{ text }}</div>
+{% macro kicker(art) -%}
+{% if art.topic %}<div class="kicker">{{ art.topic }}</div>{% endif %}
 {%- endmacro %}
 
-{% macro dateline(text) -%}
-  <div class="dateline">{{ text }}</div>
+{% macro source_link(art, prefix='Read at ') -%}
+{% if art.source %}<a class="source-link" href="{{ art._link or '#' }}">{{ prefix }}{{ art.source }}</a>{% endif %}
 {%- endmacro %}
 
-{% macro article_lead(a) -%}
-  {% if a %}
-    <article class="lead-story">
-      <h1 class="lead-headline">{{ a.title }}</h1>
-      {% if a.body and a.body.long %}
-        <p class="lead-body"><span class="dropcap">{{ a.body.long[0] }}</span>{{ a.body.long[1:] }}</p>
-      {% elif a.body and a.body.medium %}
-        <p class="lead-body">{{ a.body.medium }}</p>
-      {% endif %}
-      <div class="byline">{{ a.source }}</div>
-    </article>
+{% macro why_line(art) -%}
+{% if art.why %}<div class="why">Why: {{ art.why }}</div>{% endif %}
+{%- endmacro %}
+
+{% macro outside_tag(art) -%}
+{% if art.outside_bubble %}<span class="outside-tag">Outside your usual reading</span>{% endif %}
+{%- endmacro %}
+
+{% macro ornament() -%}
+<div class="ornament" aria-hidden="true">&#10086;</div>
+{%- endmacro %}
+
+{% macro article_image(art) -%}
+{% if art._img %}
+<figure class="art-figure">
+  <img src="{{ art._img }}" alt="">
+  {% if art._credit %}<figcaption>{{ art._credit }}</figcaption>{% endif %}
+</figure>
+{% else %}
+{{ ornament() }}
+{% endif %}
+{%- endmacro %}
+
+{% macro qr_block(svg, caption) -%}
+{% if svg %}
+<figure class="qr-figure">
+  <div class="qr">{{ svg|safe }}</div>
+  {% if caption %}<figcaption>{{ caption }}</figcaption>{% endif %}
+</figure>
+{% endif %}
+{%- endmacro %}
+
+{% macro press_gallery(pg) -%}
+{% if pg %}
+<div class="press-gallery">
+  <div class="pg-title">One story, three papers</div>
+  {% if pg.topic_label %}<div class="pg-topic">{{ pg.topic_label }}</div>{% endif %}
+  <div class="pg-cols">
+    {% for row in (pg.rows or []) %}
+      <div class="pg-col">
+        {% if row.source %}<div class="pg-source">{{ row.source }}</div>{% endif %}
+        <a class="pg-headline" href="{{ row._link or row.url or '#' }}">{{ row.headline or '' }}</a>
+        {% if row.emphasis %}<div class="pg-emph">{{ row.emphasis }}</div>{% endif %}
+      </div>
+    {% endfor %}
+  </div>
+  {% if pg.agreed_facts %}
+    <div class="pg-agree">All outlets agree: {{ (pg.agreed_facts|join(' ')) }}</div>
   {% endif %}
-{%- endmacro %}
-
-{% macro article_brief(a, klass='') -%}
-  {% if a %}
-    <article class="brief {{ klass }}">
-      <h3>{{ a.title }}</h3>
-      {% if a.body and a.body.short %}<p>{{ a.body.short }}</p>{% endif %}
-    </article>
+  {% if pg.open_question %}
+    <div class="pg-question"><em>{{ pg.open_question }}</em></div>
   {% endif %}
-{%- endmacro %}
-
-{% macro article_standard(a) -%}
-  {% if a %}
-    <article class="standard">
-      <h2>{{ a.title }}</h2>
-      {% if a.body and a.body.medium %}<p>{{ a.body.medium }}</p>{% endif %}
-      <div class="byline">{{ a.source }}</div>
-    </article>
-  {% endif %}
-{%- endmacro %}
-
-{% macro qr_block(svg) -%}
-  {% if svg %}
-    <div class="qr">{{ svg|safe }}</div>
-  {% endif %}
+  <div class="pg-footnote">Framing differences, not fact-checks.</div>
+</div>
+{% endif %}
 {%- endmacro %}

@@ -13,6 +13,7 @@ from ..models.schemas import (
     Weather,
 )
 from .fallback_editor import build_edition
+from .extras import enrich_edition
 from .widgets import weather_for
 
 
@@ -70,7 +71,7 @@ async def build_edition_async(reader_id: str, date_str: str) -> Optional[Edition
 
     edition.front.weather = Weather(**weather) if weather else None
     edition.dateline = f"{city} \u2014 {date_str}"
-    return edition
+    return enrich_edition(edition)
 
 
 async def curate(reader_id: str, date_str: str) -> Optional[Edition]:

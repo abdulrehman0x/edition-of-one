@@ -21,8 +21,10 @@ class EventIn(BaseModel):
 
 @router.post("")
 async def record(ev: EventIn):
-    store = get_store()
-    ts = time.time_ns()
-    key = f"events/{ev.reader_id}/{ts}_{ev.event_type}"
-    store.put(key, ev.model_dump())
+    ns = time.time_ns()
+    payload = ev.model_dump()
+    # The learning engine selects events by this millisecond timestamp;
+    # without it every event looks like it happened at time 0 and is ignored.
+    payload["ts"] = ns // 1_000_000
+    get_store().put(f"events/{ev.reader_id}/{ns}_{ev.event_type}", payload)
     return {"ok": True}

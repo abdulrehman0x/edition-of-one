@@ -19,3 +19,5 @@ pytest
 pyyaml
 # optional, only used when LLM_OFFLINE=0 (falls back to hashing embeddings):
 # sentence-transformers
+mutagen
+# optional: matplotlib  (chart written by pipelines/simulate_readers.py)

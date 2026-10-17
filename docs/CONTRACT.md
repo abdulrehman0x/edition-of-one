@@ -53,3 +53,12 @@ App entry point: `app.main:app` (re-exports `app.api.main:app`).
 - `GET  /profile/{reader_id}`
 - `GET  /dev/readers`          (only when ENABLE_DEV=1)
 - `DELETE /dev/reset`          (only when ENABLE_DEV=1)
+## Phase 2 additions
+- `Edition` gains `weight_snapshot`, `why_text`, `broadcast`.
+- `Profile` gains `reading_time_pref`, `topic_stats`, `weight_deltas`.
+- `POST /profile/{reader_id}/advance` — learn from events, build tomorrow's edition.
+- `GET  /profile/{reader_id}/history` — weight snapshots.
+- `DELETE /profile/{reader_id}/topics/{topic}` — drop a topic.
+- `POST /edition/{reader_id}/enrich?date=&audio=` — rebuild gallery/back page/broadcast.
+- `GET  /audio/{reader_id}/{date}` — broadcast MP3 (only when audio was generated).
+- Events are stored with a millisecond `ts`; learning state lives under `learning/<reader>/`.

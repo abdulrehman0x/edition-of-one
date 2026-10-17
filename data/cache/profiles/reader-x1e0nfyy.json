@@ -1,0 +1,1 @@
+{"reader_id": "reader-x1e0nfyy", "name": "Reader", "topics": ["cricket", "sport", "football", "pakistan"], "weights": {"cricket": 1.0, "sport": 1.0, "football": 1.0, "pakistan": 0.7}, "location": "Islamabad", "tone": "analytical", "outside_bubble_ratio": 0.15, "reading_time_pref": "long", "topic_stats": {}, "weight_deltas": {}}

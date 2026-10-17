@@ -1,75 +1,264 @@
-{% import "_macros.html.j2" as m %}
-<!doctype html>
+{% import "_macros.html.j2" as m -%}
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>{{ edition.nameplate }} — {{ edition.date }}</title>
-  <link rel="stylesheet" href="static/broadsheet.css">
+<meta charset="utf-8">
+<title>Edition of One — {{ edition.reader_name or '' }}</title>
+<link rel="stylesheet" href="pdf_generator/static/broadsheet.css">
+{% if page == 'A4' %}
+<style>
+@page { size: A4; margin: 10mm 9mm 12mm; }
+html { font-size: 6.84pt; }
+body { font-size: 6.84pt; line-height: 1.3; }
+.nameplate { font-size: 47.5pt; }
+.dateline-strip { font-size: 6.1pt; }
+.kicker { font-size: 5.4pt; }
+.lead-headline { font-size: 28.8pt; }
+.lead-deck { font-size: 8.6pt; }
+.art-figure figcaption { font-size: 5pt; }
+.dropcap::first-letter { font-size: 24.5pt; }
+.source-link { font-size: 5.8pt; }
+.qr { width: 15.8mm; height: 15.8mm; }
+.qr-figure figcaption { font-size: 4.7pt; }
+.box-title { font-size: 7.9pt; }
+.editor-note { font-size: 6.5pt; }
+.brief-headline { font-size: 7.6pt; }
+.brief-body { font-size: 6.1pt; }
+.sec-headline { font-size: 10.1pt; }
+.sec-body { font-size: 6.3pt; }
+.inside-line { font-size: 5.8pt; }
+.why-lead { font-size: 5.4pt; }
+.section-header { font-size: 13pt; }
+.pg-title { font-size: 10.1pt; }
+.pg-topic { font-size: 7.2pt; }
+.pg-source { font-size: 5.4pt; }
+.pg-headline { font-size: 9.4pt; }
+.pg-emph { font-size: 6.1pt; }
+.pg-agree { font-size: 6.5pt; }
+.pg-question { font-size: 6.5pt; }
+.pg-footnote { font-size: 5pt; }
+.feature-headline { font-size: 15.8pt; }
+.feature-deck { font-size: 7.9pt; }
+.story-headline { font-size: 7.9pt; }
+.story-deck { font-size: 6.5pt; }
+.story-body { font-size: 6.1pt; }
+.why { font-size: 5.4pt; }
+.outside-tag { font-size: 4.7pt; }
+.ornament { font-size: 17.3pt; }
+.back-title { font-size: 8.6pt; }
+.quiz li { font-size: 6.5pt; }
+.q-opts { font-size: 6.1pt; }
+.wordsearch td { font-size: 5.8pt; }
+.ws-words { font-size: 5.8pt; }
+.markets { font-size: 6.1pt; }
+.otd { font-size: 6.5pt; }
+.quiz-answers { font-size: 5pt; }
+</style>
+{% endif %}
 </head>
 <body>
 
-<header class="masthead">
-  {{ m.nameplate(edition.nameplate or "Edition of One") }}
-  {{ m.dateline(edition.dateline or edition.date) }}
-</header>
-
+{# ===================== PAGE 1 — FRONT ===================== #}
 <section class="front">
-  <div class="col col-main">
-    {{ m.article_lead(edition.front.lead) }}
-  </div>
-  <aside class="col col-side">
-    {% if edition.front.weather and edition.front.weather.temp_c is not none %}
-      <div class="weather">
-        <div class="weather-city">{{ edition.front.weather.city }}</div>
-        <div class="weather-temp">{{ edition.front.weather.temp_c }}°</div>
-        <div class="weather-range">H {{ edition.front.weather.high_c }}° / L {{ edition.front.weather.low_c }}°</div>
-        {% if edition.front.weather.condition %}<div class="weather-range">{{ edition.front.weather.condition }}</div>{% endif %}
+  <header class="nameplate-wrap">
+    <h1 class="nameplate">Edition of One</h1>
+    <div class="rule-double"></div>
+    <div class="rule-thin"></div>
+    <div class="dateline-strip">
+      <span class="dl-left">Printed for {{ edition.reader_name or '' }}</span>
+      <span class="dl-center">No. {{ edition.issue_no or '' }} &mdash; {{ edition._dateline }}</span>
+      <span class="dl-right">{{ edition._weather or '' }}</span>
+    </div>
+    <div class="rule-thin"></div>
+  </header>
+
+  {% set lead = edition.lead %}
+  {% if lead %}
+  <div class="lead-row">
+    <div class="lead-main">
+      {{ m.kicker(lead) }}
+      <h2 class="lead-headline">
+        <a href="{{ lead._link or '#' }}">{{ lead.headline or '' }}</a>
+      </h2>
+      {% if lead.deck %}<p class="lead-deck">{{ lead.deck }}</p>{% endif %}
+      {{ m.article_image(lead) }}
+      <div class="lead-body">
+        <p class="dropcap">{{ (lead.body or '')|words(110) }}</p>
       </div>
-    {% endif %}
-    {% if edition.front.quote %}
-      <blockquote class="pullquote">{{ edition.front.quote }}</blockquote>
-    {% endif %}
-    {{ m.qr_block(edition.qr_svg) }}
-  </aside>
-</section>
+      <div class="lead-foot">
+        {% if lead.source %}<a class="source-link" href="{{ lead._link or '#' }}">Read the original at {{ lead.source }}</a>{% endif %}
+        {{ m.qr_block(lead._qr, 'Scan to read') }}
+      </div>
+    </div>
+    <aside class="lead-side">
+      <div class="box editor-box">
+        <h3 class="box-title">From the Editor</h3>
+        <p class="editor-note">{{ edition.editors_note or '' }}</p>
+      </div>
+      {% if edition._listen_qr %}
+      <div class="box listen-box">
+        <h3 class="box-title">Listen</h3>
+        {{ m.qr_block(edition._listen_qr, 'Hear this edition') }}
+      </div>
+      {% endif %}
+      {% if edition.briefs %}
+      <div class="box briefs-box">
+        <h3 class="box-title">In Brief</h3>
+        {% for b in (edition.briefs or [])[:3] %}
+          <div class="brief">
+            <a class="brief-headline" href="{{ b._link or '#' }}">{{ b.headline or '' }}</a>
+            <p class="brief-body">{{ (b.body or '')|words(35) }}</p>
+          </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </aside>
+  </div>
+  {% endif %}
 
-<section class="secondary">
-  {% for a in edition.front.secondary %}
-    {{ m.article_standard(a) }}
-  {% endfor %}
-</section>
-
-<section class="briefs">
-  {% for a in edition.front.briefs %}
-    {{ m.article_brief(a) }}
-  {% endfor %}
-</section>
-
-{% for section in edition.sections %}
-<section class="section-page">
-  <h2 class="section-title">{{ section.name }}</h2>
-  <div class="section-grid">
-    {% for a in section.articles %}
-      {{ m.article_standard(a) }}
+  {% set secs = edition.secondary or [] %}
+  {% if secs %}
+  <div class="secondary-row">
+    {% for a in secs[:4] %}
+      <div class="sec-col">
+        {{ m.kicker(a) }}
+        <h3 class="sec-headline"><a href="{{ a._link or '#' }}">{{ a.headline or '' }}</a></h3>
+        <p class="sec-body">{{ (a.body or '')|words(60) }}</p>
+        {% if a.source %}<a class="source-link" href="{{ a._link or '#' }}">Read at {{ a.source }}</a>{% endif %}
+        {% if loop.index0 < 2 %}{{ m.qr_block(a._qr, '') }}{% endif %}
+      </div>
     {% endfor %}
   </div>
-</section>
-{% endfor %}
+  {% endif %}
 
-{% if edition.outside_bubble %}
-<section class="outside-bubble">
-  <h2 class="section-title">Outside Your Bubble</h2>
-  <div class="section-grid">
-    {% for a in edition.outside_bubble %}
-      {{ m.article_brief(a, klass='outside') }}
-    {% endfor %}
-  </div>
+  <footer class="front-footer">
+    <div class="inside-line">
+      <strong>Inside:</strong>
+      {{ (edition.sections or [])|map(attribute='name', default='')|join('  ·  ') }}
+    </div>
+    {% if lead and lead.why %}
+      <div class="why-lead"><em>Why you are seeing this: {{ lead.why }}</em></div>
+    {% endif %}
+  </footer>
 </section>
+
+{# ===================== INSIDE PAGES ===================== #}
+{% set sections = edition.sections or [] %}
+{% if sections %}
+  {% for sec in sections %}
+    <section class="page inside">
+      <div class="section-header">{{ sec.name or '' }}</div>
+
+      {% if loop.first and edition.press_gallery %}
+        {{ m.press_gallery(edition.press_gallery) }}
+      {% endif %}
+
+      {% set feat = sec.feature %}
+      {% if feat %}
+        <div class="feature-block">
+          <div class="feature-img">
+            {{ m.article_image(feat) }}
+          </div>
+          <div class="feature-text">
+            {{ m.kicker(feat) }}
+            <h3 class="feature-headline"><a href="{{ feat._link or '#' }}">{{ feat.headline or '' }}</a></h3>
+            {% if feat.deck %}<p class="feature-deck">{{ feat.deck }}</p>{% endif %}
+            <p class="dropcap feature-body">{{ (feat.body or '')|words(110) }}</p>
+            {{ m.why_line(feat) }}
+            {{ m.outside_tag(feat) }}
+            {{ m.source_link(feat) }}
+          </div>
+        </div>
+      {% endif %}
+
+      {% set items = sec.items or [] %}
+      {% if items %}
+        <div class="section-columns">
+          {% for a in items %}
+            <div class="story">
+              {{ m.kicker(a) }}
+              <h4 class="story-headline"><a href="{{ a._link or '#' }}">{{ a.headline or '' }}</a></h4>
+              {% if a.deck %}<p class="story-deck">{{ a.deck }}</p>{% endif %}
+              <p class="story-body">{{ (a.body or '')|words(60) }}</p>
+              {{ m.why_line(a) }}
+              {{ m.outside_tag(a) }}
+              {{ m.source_link(a) }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </section>
+  {% endfor %}
+{% elif edition.press_gallery %}
+  <section class="page inside">
+    <div class="section-header">Across the Press</div>
+    {{ m.press_gallery(edition.press_gallery) }}
+  </section>
 {% endif %}
 
-<footer class="colophon">
-  <span>Edition of One · {{ edition.reader_id }} · {{ edition.date }}</span>
-</footer>
+{# ===================== BACK PAGE ===================== #}
+{% if edition._has_backpage and edition.back_page %}
+  {% set bp = edition.back_page %}
+  <section class="page back">
+    <div class="section-header back-header">The Back Page</div>
+    <div class="back-cols">
+      <div class="back-col">
+        <h3 class="back-title">Quiz</h3>
+        <ol class="quiz">
+          {% for q in (bp.quiz or []) %}
+            <li>
+              <div class="q-text">{{ q.question or '' }}</div>
+              {% if q.options %}
+                <ol class="q-opts" type="A">
+                  {% for opt in q.options %}<li>{{ opt }}</li>{% endfor %}
+                </ol>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ol>
+      </div>
+      <div class="back-col">
+        <h3 class="back-title">Word Search</h3>
+        {% set ws = bp.word_search %}
+        {% if ws %}
+          <table class="wordsearch">
+            {% for row in (ws.grid or []) %}
+              <tr>{% for cell in row %}<td>{{ cell }}</td>{% endfor %}</tr>
+            {% endfor %}
+          </table>
+          {% if ws.words %}<div class="ws-words">{{ (ws.words|join(', ')) }}</div>{% endif %}
+        {% endif %}
+      </div>
+      <div class="back-col">
+        <h3 class="back-title">Markets</h3>
+        {% if bp.markets %}
+          <table class="markets">
+            {% for row in bp.markets %}
+              {% set chg = (row.change if row.change is defined else '')|string %}
+              <tr>
+                <td class="mk-name">{{ row.name or '' }}</td>
+                <td class="mk-val">{{ row.value if row.value is defined else (row.price if row.price is defined else '') }}</td>
+                <td class="mk-chg">
+                  {% if chg.startswith('-') %}&#9660;{% elif chg %}&#9650;{% endif %}
+                  {{ chg }}
+                </td>
+              </tr>
+            {% endfor %}
+          </table>
+        {% endif %}
+        <h3 class="back-title">On This Day</h3>
+        {% for otd in (bp.on_this_day or []) %}
+          <div class="otd"><strong>{{ otd.year or '' }}</strong> {{ otd.text or '' }}</div>
+        {% endfor %}
+      </div>
+    </div>
+    {% if bp._answers %}
+      <div class="quiz-answers">
+        <strong>Answers:</strong> {{ (bp._answers|join('   ')) }}
+      </div>
+    {% endif %}
+  </section>
+{% endif %}
 
 </body>
 </html>

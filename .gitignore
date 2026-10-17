@@ -8,3 +8,5 @@ data/llm_cache/
 data/pdfs/
 data/cache/weather_*.json
 frontend/node_modules/
+data/cache/audio/
+frontend/.next/

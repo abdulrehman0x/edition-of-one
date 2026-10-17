@@ -4,9 +4,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from ..core.config import get_settings
-from . import archive, dev, edition, events, onboarding, profile
+from . import archive, audio, dev, edition, events, onboarding, profile
 
-app = FastAPI(title="Edition of One", version="0.1.0")
+app = FastAPI(title="Edition of One", version="0.2.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -32,6 +32,7 @@ app.include_router(edition.router, prefix="/edition", tags=["edition"])
 app.include_router(archive.router, prefix="/archive", tags=["archive"])
 app.include_router(events.router, prefix="/events", tags=["events"])
 app.include_router(profile.router, prefix="/profile", tags=["profile"])
+app.include_router(audio.router, prefix="/audio", tags=["audio"])
 # /dev/reset wipes the store; keep it off outside local development.
 if get_settings().enable_dev:
     app.include_router(dev.router, prefix="/dev", tags=["dev"])

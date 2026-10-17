@@ -1,0 +1,1 @@
+{"reader_id": "demo-ayesha", "name": "Ayesha", "topics": ["pakistan", "politics", "education", "world"], "weights": {"pakistan": 1.0, "politics": 0.9, "education": 0.8, "world": 0.6}, "location": "Islamabad", "tone": "neutral", "outside_bubble_ratio": 0.15, "reading_time_pref": "medium", "topic_stats": {}, "weight_deltas": {}}

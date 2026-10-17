@@ -1,0 +1,1 @@
+{"reader_id": "demo-sara", "name": "Sara", "topics": ["cricket", "sport", "culture", "film_music", "science", "space"], "weights": {"cricket": 1.0, "sport": 0.8, "culture": 0.7, "film_music": 0.7, "science": 0.6, "space": 0.6}, "location": "Lahore", "tone": "neutral", "outside_bubble_ratio": 0.15, "reading_time_pref": "medium", "topic_stats": {}, "weight_deltas": {}}

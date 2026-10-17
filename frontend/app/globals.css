@@ -1,0 +1,140 @@
+:root {
+  --paper: #f5efe0;
+  --ink: #111111;
+  --ink-soft: #444444;
+  --ink-faint: #6c6c6c;
+  --oxblood: #8b1a1a;
+  --rule: #b9a98a;
+  --shade: #e9e1cb;
+  --serif: var(--font-caslon), "Libre Caslon Text", Georgia, serif;
+  --blackletter: var(--font-fraktur), "UnifrakturCook", serif;
+  --display: var(--font-playfair), "Playfair Display", serif;
+}
+
+*{
+  box-sizing: border-box;
+}
+
+html,
+body {
+ margin: 0;
+ padding: 0;
+ background: var(--paper);
+ color: var(--ink);
+    font-family: var(--serif);
+    line-height: 1.5;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+}
+
+a{
+  color: var(--oxblood);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.topnav {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  padding: 12px 32px;
+  border-bottom: 1px solid var(--rule);
+  background: var(--paper);
+  font-family: var(--serif);
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.topnav .brand {
+  font-family: var(--blackletter);
+  font-size: 26px;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: var(--ink);
+}
+
+.topnav a {
+  color: var(--ink);
+}
+
+.topnav a:hover {
+  color: var(--oxblood);
+  text-decoration: none;
+}
+.page {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 32px;
+}
+
+.drop-cap::first-letter {
+  font-family: var(--display);
+  float: left;
+  font-size: 68px;
+  line-height: 0.82;
+  padding: 6px 10px 0 0;
+  color: var(--oxblood);
+  font-weight: 700;
+}
+
+.rule-double {
+  border-top: 3px double var(--ink);
+  border-bottom: 1px solid var(--ink);
+  padding: 6px 0;
+}
+
+.rule-single {
+  border-top: 1px solid var(--ink);
+}
+
+.column-rule {
+  column-rule: 1px solid var(--rule);
+}
+
+button {
+  font-family: var(--serif);
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+input,
+textarea,
+select {
+    font-family: var(--serif);
+    background: var(--paper);
+    border: 1px solid var(--ink);
+    padding: 8px 10px;
+    color: var(--ink);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: 2px solid var(--oxblood);
+  outline-offset: 1px;
+}
+
+@keyframes skeleton-pulse {
+  0% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+  100% { opacity: 0.4; }
+}
+
+.skeleton {
+  background: var(--shade);
+  animation: skeleton-pulse 1.4s ease-in-out infinite;
+}
+
+@media print {
+  .topnav {
+    display: none;
+  }
+}

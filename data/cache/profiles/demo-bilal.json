@@ -1,0 +1,1 @@
+{"reader_id": "demo-bilal", "name": "Bilal", "topics": ["business", "markets", "technology", "startups", "ai"], "weights": {"business": 1.0, "markets": 0.9, "technology": 0.8, "startups": 0.7, "ai": 0.7}, "location": "Karachi", "tone": "neutral", "outside_bubble_ratio": 0.15, "reading_time_pref": "medium", "topic_stats": {}, "weight_deltas": {}}

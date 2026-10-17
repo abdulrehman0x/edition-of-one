@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Literal, Optional, List, Dict
+from typing import Any, Literal, Optional, List, Dict
 
 from pydantic import BaseModel, Field
 
@@ -122,6 +122,9 @@ class Edition(BaseModel):
     press_gallery: Optional[PressGallery] = None
     chapters: List[Chapter] = Field(default_factory=list)
     outside_bubble: List[ArticleRecord] = Field(default_factory=list)
+    weight_snapshot: Dict[str, float] = Field(default_factory=dict)
+    why_text: str = ""
+    broadcast: Optional[Dict[str, Any]] = None
 
 
 class Profile(BaseModel):
@@ -132,6 +135,9 @@ class Profile(BaseModel):
     location: str = ""
     tone: str = "neutral"
     outside_bubble_ratio: float = 0.15
+    reading_time_pref: str = "medium"
+    topic_stats: Dict[str, Dict[str, float]] = Field(default_factory=dict)
+    weight_deltas: Dict[str, float] = Field(default_factory=dict)
 
 
 class Event(BaseModel):

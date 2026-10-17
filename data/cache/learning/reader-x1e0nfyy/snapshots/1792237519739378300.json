@@ -1,0 +1,1 @@
+{"weights": {"cricket": 0.97, "sport": 0.5}, "topic_stats": {"cricket": {"alpha": 1.5, "beta": 1.5}, "sport": {"alpha": 1.5, "beta": 1.5}}, "reading_time_pref": "short"}
