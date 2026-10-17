@@ -40,7 +40,7 @@ export default function TodayPage() {
   const [feedbackState, setFeedbackState] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/edition/today", {
+    fetch("https://YOUR-BACKEND-LINK-HERE.trycloudflare.com/api/edition/today", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ categories: ["technology", "world", "business"] }),
