@@ -72,7 +72,7 @@ marginBottom: 12 }}>
   )}
   {edition.weight_snapshot && (
     <div style={{ marginTop: 16, fontSize: 11, color: "var(--ink-faint)" }}>
-     Tonight's weights:{" "}
+     Tonight&apos;s weights:{" "}
      {Object.entries(edition.weight_snapshot)
        .slice(0, 4)
        .map(([k, v]) => `${k} ${v.toFixed(2)}`)
