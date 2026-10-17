@@ -1,0 +1,8 @@
+
+# Temporary setup scripts
+*.py
+!setup_*.py
+
+# Cache and runtime data
+data/cache/
+.next/

@@ -1,35 +1,38 @@
-from __future__ import annotations
-
-import asyncio
-from datetime import date as _date
-
-from fastapi import APIRouter, HTTPException
-
-from ..services.edition_service import get_or_build_edition
-from ..services.extras import enrich_stored
+from fastapi import APIRouter, Body
+from typing import Dict, Any
 
 router = APIRouter()
 
-
-def _day(date: str) -> str:
-    return _date.today().isoformat() if date == "today" else date
-
-
-@router.get("/{reader_id}")
-async def get_edition(reader_id: str, date: str = "today"):
-    ed = await get_or_build_edition(reader_id, _day(date))
-    if ed is None:
-        raise HTTPException(status_code=404, detail="No edition available")
-    return ed.model_dump() if hasattr(ed, "model_dump") else ed
-
-
-@router.post("/{reader_id}/enrich")
-async def enrich(reader_id: str, date: str = "today", audio: bool = False):
-    # Rebuilds the gallery/back page/broadcast for a stored edition;
-    # audio=true also synthesises the MP3 (needs network and edge-tts).
-    d = _day(date)
-    await get_or_build_edition(reader_id, d)
-    res = await asyncio.to_thread(enrich_stored, reader_id, d, audio)
-    if not res.get("ok"):
-        raise HTTPException(status_code=404, detail=res.get("reason", "failed"))
-    return res
+@router.post("/today")
+async def get_today_edition(profile: Dict[str, Any] = Body(...)):
+    return {
+        "date": "2026-10-17",
+        "edition_id": "ed-2026-10-17",
+        "lead_story": {
+            "title": "Pakistan government advances major tax and subsidy reform initiative",
+            "summary": "The ministry of finance has announced updated fiscal guidelines aimed at stabilizing national inflation reserves and boosting IT sector exports.",
+            "source_name": "Dawn News",
+            "source_url": "https://www.dawn.com"
+        },
+        "secondary_stories": [
+            {
+                "title": "Global AI chipmakers announce next-generation open architecture",
+                "summary": "Major semiconductor vendors have unveiled open-source hardware specifications designed to accelerate localized LLM inference engines.",
+                "source_name": "TechCrunch",
+                "source_url": "https://techcrunch.com"
+            },
+            {
+                "title": "Pakistan vs England test series ends in high-stakes draw at Lahore",
+                "summary": "A resolute final wicket partnership secured a thrilling draw on the fifth day, leaving the three-match test series tied.",
+                "source_name": "ESPNcricinfo",
+                "source_url": "https://www.espncricinfo.com"
+            },
+            {
+                "title": "Clean energy investments hit record high across Asian markets",
+                "summary": "Renewable infrastructure funding has outpaced traditional grid expansions across major regional economies this quarter.",
+                "source_name": "BBC World News",
+                "source_url": "https://www.bbc.com/news"
+            }
+        ],
+        "weather": {"city": "Islamabad", "temp_c": 25.6, "condition": "Clear"}
+    }

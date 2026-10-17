@@ -21,3 +21,8 @@ pyyaml
 # sentence-transformers
 mutagen
 # optional: matplotlib  (chart written by pipelines/simulate_readers.py)
+
+mangum>=0.17.0
+reportlab>=4.0.0
+fastapi>=0.100.0
+uvicorn>=0.20.0
